@@ -1,0 +1,1616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="viewport" id="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="MobileOptimized" content="320">
+<meta name="HandheldFriendly" content="true">
+<meta http-equiv="content-language" content="en">
+<meta http-equiv="cleartype" content="on">
+
+<meta property="og:url" content="">
+<meta property="og:type" content="website">
+<meta property="og:title" content="MEMEchelin - Stake">
+<meta property="og:description" content="">
+<meta property="og:image" content="">
+
+<link rel="stylesheet" type="text/css" href="css/fonts.css">
+
+<link rel="apple-touch-icon" sizes="144x144" href="img/fav.png">
+<link rel="shortcut icon" type="image/png" sizes="32x32" href="img/fav.png">
+<link rel="icon" type="image/png" sizes="16x16" href="img/fav.png">
+<link rel="mask-icon" href="img/fav.png" color="#FF029C">
+
+<script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
+
+<title>MEMEchelin - Stake</title>
+
+<style type="text/css">
+    :root {
+        --yellow: #FEDB02;
+        --pink: #FF029C;
+        --yellowHover: #FFE85A;
+        --pinkHover: #FF4EBA;
+        --background: #090408;
+        --card-background: #180010;
+    }
+
+    html,
+    body {
+        margin: 0px;
+        padding: 0px;
+        overflow-x: hidden;
+        cursor: default;
+        overscroll-behavior-x: none;
+    }
+
+    body {
+        --default: url('img/cursor.webp'), auto;
+        --pointer: url('img/cursor-hover.webp?1'), pointer;
+
+        background-color: var(--background);
+        color: #fff;
+        font-family: 'Montserrat';
+        font-weight: 400;
+        font-size: 18px;
+        letter-spacing: 0px;
+        min-height: 100vh;
+    }
+
+    /* Header */
+    .header-fixed-wrapper {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+    }
+
+    .header-fixed {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 32px;
+        background: linear-gradient(180deg, rgba(9,4,8,0.95) 0%, rgba(9,4,8,0) 100%);
+    }
+
+    .header-fixed.hidden {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .logo {
+        width: 50px;
+        height: 50px;
+        background: url('img/fav.png') center/contain no-repeat;
+        cursor: pointer;
+    }
+
+    .socials {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .social {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.1);
+        cursor: var(--pointer);
+        transition: background 0.2s;
+    }
+
+    .social:hover {
+        background: rgba(255,255,255,0.2);
+    }
+
+    .social.twitter {
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>') center/60% no-repeat rgba(255,255,255,0.1);
+    }
+
+    .social.fourmeme {
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>') center/60% no-repeat rgba(255,255,255,0.1);
+    }
+
+    .language-toggle {
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><circle cx="12" cy="12" r="10" stroke="%23fff" stroke-width="2" fill="none"/><path d="M2 12h20M12 2c-3 3-3 17 0 20M12 2c3 3 3 17 0 20" stroke="%23fff" stroke-width="2"/></svg>') center/60% no-repeat rgba(255,255,255,0.1);
+    }
+
+    .social.wallet-connect {
+        background: rgba(255,255,255,0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .social.wallet-connect:hover {
+        background: rgba(255,255,255,0.2);
+    }
+
+    .social.wallet-connect.connected {
+        background: var(--yellow);
+    }
+
+    .wallet-popup {
+        position: fixed;
+        top: 70px;
+        right: 20px;
+        background: var(--card-background);
+        border: 1px solid rgba(254, 219, 2, 0.4);
+        border-radius: 12px;
+        padding: 16px;
+        min-width: 260px;
+        z-index: 1001;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        display: none;
+    }
+
+    .wallet-popup.show {
+        display: block;
+    }
+
+    .wallet-popup-header {
+        font-size: 12px;
+        color: rgba(255,255,255,0.6);
+        margin-bottom: 8px;
+        text-transform: uppercase;
+    }
+
+    .wallet-popup-address {
+        font-size: 14px;
+        font-weight: 600;
+        color: #fff;
+        word-break: break-all;
+        margin-bottom: 12px;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .wallet-popup-address:hover {
+        color: var(--yellow);
+        text-decoration: underline;
+    }
+
+    .wallet-popup-disconnect {
+        width: 100%;
+        height: 40px;
+        background: var(--pink);
+        border: none;
+        border-radius: 8px;
+        color: #fff;
+        font-weight: 700;
+        font-size: 14px;
+        cursor: pointer;
+        font-family: 'Montserrat';
+    }
+
+    .wallet-popup-disconnect:hover {
+        background: var(--pinkHover);
+    }
+
+    /* Wallet Selection Modal */
+    .wallet-select-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.8);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+    }
+
+    .wallet-select-modal.show {
+        display: flex;
+    }
+
+    .wallet-select-content {
+        background: var(--card-background);
+        border: 1px solid rgba(254, 219, 2, 0.4);
+        border-radius: 20px;
+        padding: 24px;
+        width: 90%;
+        max-width: 360px;
+    }
+
+    .wallet-select-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .wallet-select-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: #fff;
+    }
+
+    .wallet-select-close {
+        background: none;
+        border: none;
+        color: rgba(255,255,255,0.5);
+        font-size: 24px;
+        cursor: pointer;
+        padding: 0;
+        line-height: 1;
+    }
+
+    .wallet-select-close:hover {
+        color: #fff;
+    }
+
+    .wallet-option {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 16px;
+        background: rgba(255,255,255,0.05);
+        border: 2px solid rgba(254, 219, 2, 0.2);
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.2s;
+        margin-bottom: 12px;
+    }
+
+    .wallet-option:hover {
+        background: rgba(255,255,255,0.1);
+        border-color: var(--yellow);
+    }
+
+    .wallet-option:last-child {
+        margin-bottom: 0;
+    }
+
+    .wallet-option.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .wallet-option-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #fff;
+    }
+
+    .wallet-option-icon svg {
+        width: 24px;
+        height: 24px;
+    }
+
+    .wallet-option-info {
+        flex: 1;
+    }
+
+    .wallet-option-name {
+        font-size: 16px;
+        font-weight: 700;
+        color: #fff;
+    }
+
+    .wallet-option-status {
+        font-size: 12px;
+        color: rgba(255,255,255,0.6);
+    }
+
+    .toast-container {
+        position: fixed;
+        top: 80px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 2000;
+        display: none;
+    }
+
+    .toast-container.show {
+        display: block;
+    }
+
+    .toast {
+        background: var(--card-background);
+        border: 2px solid var(--pink);
+        border-radius: 12px;
+        padding: 16px 20px;
+        min-width: 300px;
+        max-width: 90vw;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+        text-align: center;
+    }
+
+    .toast.success {
+        border-color: var(--yellow);
+    }
+
+    .toast-icon {
+        font-size: 32px;
+        margin-bottom: 8px;
+    }
+
+    .toast.success .toast-icon {
+        color: var(--yellow);
+    }
+
+    .toast.error .toast-icon {
+        color: var(--pink);
+    }
+
+    .toast-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 8px;
+    }
+
+    .toast-message {
+        font-size: 14px;
+        color: rgba(255,255,255,0.7);
+        margin-bottom: 12px;
+        word-break: break-word;
+    }
+
+    .toast-link {
+        display: inline-block;
+        font-size: 13px;
+        color: var(--yellow);
+        text-decoration: underline;
+        cursor: pointer;
+    }
+
+    .toast-close {
+        position: absolute;
+        top: 8px;
+        right: 12px;
+        background: none;
+        border: none;
+        color: rgba(255,255,255,0.5);
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    .toast-close:hover {
+        color: #fff;
+    }
+
+    .toast-progress {
+        height: 3px;
+        background: var(--yellow);
+        border-radius: 0 0 10px 10px;
+        margin-top: 12px;
+        animation: toastProgress 3s linear forwards;
+    }
+
+    .toast.error .toast-progress {
+        background: var(--pink);
+    }
+
+    @keyframes toastProgress {
+        from { width: 100%; }
+        to { width: 0%; }
+    }
+
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1000;
+        display: none;
+    }
+
+    .overlay.show {
+        display: block;
+    }
+
+    .deposit-button {
+        height: 44px;
+        padding: 0 24px;
+        background: linear-gradient(110deg, var(--yellow) 0%, #fff7a8 50%, var(--yellow) 100%);
+        background-size: 200% 100%;
+        border-radius: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: var(--pointer);
+        transition: all 0.3s ease;
+        border: none;
+    }
+
+    .deposit-button span {
+        font-weight: 900;
+        font-size: 14px;
+        color: #000;
+        letter-spacing: 1px;
+    }
+
+    .deposit-button:hover {
+        background-position: 100% 100%;
+        box-shadow: 0 0 30px rgba(254, 219, 2, 0.5);
+    }
+
+    /* Main Content */
+    .stake-page {
+        min-height: 100vh;
+        padding: 120px 20px 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .stake-container {
+        width: 100%;
+        max-width: 480px;
+    }
+
+    .stake-card {
+        background: var(--card-background);
+        border: 1px solid rgba(254, 219, 2, 0.4);
+        border-radius: 20px;
+        box-shadow: 0 0 60px rgba(255, 2, 156, 0.25), 0 0 40px rgba(254, 219, 2, 0.15);
+        padding: 28px 24px 32px;
+    }
+
+    .stake-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 24px;
+    }
+
+    .stake-header-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .stake-back {
+        width: 40px;
+        height: 40px;
+        border: none;
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        font-size: 20px;
+        border-radius: 10px;
+        cursor: var(--pointer);
+        transition: background 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .stake-back:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    .stake-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 900;
+        font-size: 26px;
+        color: #fff;
+    }
+
+    .stake-title-icon {
+        width: 36px;
+        height: 36px;
+        background: linear-gradient(135deg, var(--yellow), var(--pink));
+        border-radius: 10px;
+    }
+
+    .stake-stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+
+    .stake-stat {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(254, 219, 2, 0.2);
+        border-radius: 14px;
+        padding: 16px;
+    }
+
+    .stake-stat-label {
+        font-family: 'Graphik';
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--yellow);
+        text-transform: uppercase;
+        margin-bottom: 6px;
+    }
+
+    .stake-stat-value {
+        font-weight: 900;
+        font-size: 22px;
+        color: #fff;
+    }
+
+    .stake-tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+
+    .stake-tab {
+        flex: 1;
+        height: 52px;
+        border: 2px solid rgba(254, 219, 2, 0.4);
+        background: transparent;
+        color: rgba(255, 255, 255, 0.7);
+        font-weight: 800;
+        font-size: 16px;
+        border-radius: 12px;
+        cursor: var(--pointer);
+        transition: all 0.25s ease;
+        font-family: 'Montserrat';
+    }
+
+    .stake-tab.active {
+        background: linear-gradient(110deg, var(--yellow) 0%, var(--yellow) 30%, #fff7a8 50%, var(--yellow) 70%, var(--yellow) 100%);
+        background-size: 260% 100%;
+        border-color: var(--yellow);
+        color: #000;
+        animation: depositButtonGlow 2.6s ease-in-out infinite;
+    }
+
+    .stake-form {
+        position: relative;
+    }
+
+    .stake-form-tab {
+        display: none;
+    }
+
+    .stake-form-tab.active {
+        display: block;
+    }
+
+    .stake-input-wrapper {
+        display: flex;
+        align-items: center;
+        background: rgba(255, 255, 255, 0.08);
+        border: 2px solid rgba(254, 219, 2, 0.3);
+        border-radius: 14px;
+        overflow: hidden;
+        transition: border-color 0.25s ease;
+    }
+
+    .stake-input-wrapper:focus-within {
+        border-color: var(--yellow);
+    }
+
+    .stake-input {
+        flex: 1;
+        height: 60px;
+        padding: 0 20px;
+        background: transparent;
+        border: none;
+        color: #fff;
+        font-size: 20px;
+        font-weight: 600;
+        outline: none;
+        width: 100%;
+        font-family: 'Montserrat';
+    }
+
+    .stake-input::placeholder {
+        color: rgba(255, 255, 255, 0.4);
+    }
+
+    .stake-max-btn {
+        height: 40px;
+        padding: 0 16px;
+        margin-right: 10px;
+        background: var(--yellow);
+        border: none;
+        border-radius: 8px;
+        color: #000;
+        font-weight: 800;
+        font-size: 13px;
+        cursor: var(--pointer);
+        transition: background 0.2s;
+        font-family: 'Montserrat';
+    }
+
+    .stake-max-btn:hover {
+        background: var(--yellowHover);
+    }
+
+    .stake-balance {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 4px;
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+    .stake-balance span:last-child {
+        font-weight: 700;
+        color: #fff;
+    }
+
+    .stake-submit-wrapper {
+        margin-top: 16px;
+    }
+
+    .stake-submit {
+        width: 100%;
+        height: 58px;
+        background: linear-gradient(110deg, var(--pink) 0%, #ff4eb8 50%, var(--pink) 100%);
+        background-size: 260% 100%;
+        border: none;
+        border-radius: 14px;
+        color: #fff;
+        font-weight: 900;
+        font-size: 18px;
+        cursor: var(--pointer);
+        transition: all 0.25s ease;
+        animation: depositButtonGlow 2.6s ease-in-out infinite;
+        font-family: 'Montserrat';
+    }
+
+    .stake-submit:hover:not(:disabled) {
+        background-position: 50% 50%;
+        box-shadow: 0 0 30px rgba(255, 2, 156, 0.5);
+    }
+
+    .stake-submit:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .stake-hint {
+        margin-top: 16px;
+        padding: 12px;
+        text-align: center;
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.6);
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+    }
+
+    .withdrawal-status {
+        margin-top: 16px;
+        padding: 16px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(254, 219, 2, 0.3);
+        border-radius: 12px;
+    }
+
+    .withdrawal-info {
+        margin-bottom: 12px;
+    }
+
+    .withdrawal-label {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.6);
+        text-transform: uppercase;
+        margin-bottom: 4px;
+    }
+
+    .withdrawal-amount {
+        font-size: 18px;
+        font-weight: 700;
+        color: #fff;
+    }
+
+    .withdrawal-timer {
+        font-size: 14px;
+        color: var(--yellow);
+        margin-top: 4px;
+    }
+
+    .stake-submit-claim-withdrawal {
+        background: linear-gradient(110deg, var(--yellow) 0%, #fff7a8 50%, var(--yellow) 100%);
+        background-size: 260% 100%;
+        color: #000;
+    }
+
+    .stake-submit-claim-withdrawal:hover:not(:disabled) {
+        background-position: 50% 50%;
+        box-shadow: 0 0 30px rgba(254, 219, 2, 0.5);
+    }
+
+    .withdrawal-requests {
+        margin-top: 16px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(254, 219, 2, 0.3);
+        border-radius: 12px;
+        padding: 16px;
+    }
+
+    .withdrawal-requests-header {
+        font-size: 14px;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 12px;
+    }
+
+    .withdrawal-request-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        margin-bottom: 8px;
+    }
+
+    .withdrawal-request-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .withdrawal-request-info {
+        flex: 1;
+    }
+
+    .withdrawal-request-amount {
+        font-size: 16px;
+        font-weight: 700;
+        color: #fff;
+    }
+
+    .withdrawal-request-time {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.6);
+        margin-top: 4px;
+    }
+
+    .withdrawal-request-timer {
+        font-size: 12px;
+        color: var(--yellow);
+        margin-top: 2px;
+    }
+
+    .withdrawal-request-timer.ready {
+        color: #00ff00;
+    }
+
+    .withdrawal-claim-btn {
+        height: 36px;
+        padding: 0 16px;
+        background: var(--yellow);
+        border: none;
+        border-radius: 8px;
+        color: #000;
+        font-weight: 800;
+        font-size: 13px;
+        cursor: pointer;
+        font-family: 'Montserrat';
+    }
+
+    .withdrawal-claim-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    @keyframes depositButtonGlow {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    @media (max-width: 600px) {
+        .stake-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .stake-header-left {
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .stake-title {
+            font-size: 22px;
+        }
+
+        .stake-stats {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="header-fixed-wrapper">
+    <div class="header-fixed">
+        <a href="/" class="logo"></a>
+
+        <div class="socials">
+            <div class="social wallet-connect" id="wallet-connect-btn" aria-label="Connect Wallet">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                    <path d="M21 7.28V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-2.28A2 2 0 0 0 22 15V9.14A2 2 0 0 0 21 7.28zM5 5h14v3.17l-2-1.43V5zm14 14H5v-5.74l2 1.43V19zm0-7H7l-2-1.43V9h12v3z"/>
+                </svg>
+            </div>
+            <div class="social twitter" data-href="https://x.com/MEMEchelin_CTO"></div>
+            <div class="social fourmeme" data-href="https://four.meme/"></div>
+            <div class="language-toggle social" data-language-toggle aria-label="切换到中文"></div>
+        </div>
+    </div>
+</div>
+
+<div class="overlay" id="wallet-overlay"></div>
+
+<div class="wallet-popup" id="wallet-popup">
+    <button class="wallet-popup-close" id="wallet-popup-close" style="position:absolute;top:8px;right:12px;background:none;border:none;color:rgba(255,255,255,0.5);font-size:20px;cursor:pointer;">&times;</button>
+    <div class="wallet-popup-header">Connected Wallet</div>
+    <a class="wallet-popup-address" id="wallet-popup-address" target="_blank" rel="noopener noreferrer"></a>
+    <button class="wallet-popup-disconnect" id="wallet-disconnect-btn">Disconnect</button>
+</div>
+
+<div class="wallet-select-modal" id="wallet-select-modal">
+    <div class="wallet-select-content">
+        <div class="wallet-select-header">
+            <span class="wallet-select-title">Connect Wallet</span>
+            <button class="wallet-select-close" id="wallet-select-close">&times;</button>
+        </div>
+        <div class="wallet-option" id="wallet-option-metamask">
+            <div class="wallet-option-icon">
+                <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M32.9588 6.82242L21.2769 16.3399L23.8841 10.3156L32.9588 6.82242Z" fill="#E17726"/>
+                    <path d="M7.04053 6.82242L18.6765 16.3889L16.1152 10.3156L7.04053 6.82242Z" fill="#E27625"/>
+                    <path d="M29.0286 26.8835L25.8778 31.0015L32.3945 33.4234L34.7678 26.6885L29.0286 26.8835Z" fill="#E27625"/>
+                    <path d="M5.23181 26.6885L7.60508 33.4234L14.1218 31.0015L10.971 26.8835L5.23181 26.6885Z" fill="#E27625"/>
+                    <path d="M15.5037 15.9787L13.4008 19.074L20.8529 19.315L18.7234 12.5914L15.5037 15.9787Z" fill="#E27625"/>
+                    <path d="M24.4963 15.9787L23.8688 11.8195L20.8529 19.315L24.4971 19.074L24.4963 15.9787Z" fill="#E27625"/>
+                    <path d="M10.971 26.8835L14.7708 30.0741L10.3203 31.9798L10.971 26.8835Z" fill="#E27625"/>
+                    <path d="M29.0287 26.8835L29.6794 31.9798L25.2288 30.0741L29.0287 26.8835Z" fill="#E27625"/>
+                </svg>
+            </div>
+            <div class="wallet-option-info">
+                <div class="wallet-option-name">MetaMask</div>
+                <div class="wallet-option-status">Not installed</div>
+            </div>
+        </div>
+        <div class="wallet-option" id="wallet-option-okxwallet">
+            <div class="wallet-option-icon">
+                <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="40" height="40" rx="8" fill="#FFFFFF"/>
+                    <path d="M20 8L28 13.5V21L20 26.5L12 21V13.5L20 8Z" fill="#E17726"/>
+                    <path d="M20 14L24 16.5V20L20 22.5L16 20V16.5L20 14Z" fill="#FFFFFF"/>
+                </svg>
+            </div>
+            <div class="wallet-option-info">
+                <div class="wallet-option-name">OKX Wallet</div>
+                <div class="wallet-option-status">Not installed</div>
+            </div>
+        </div>
+        <div class="wallet-option" id="wallet-option-walletconnect">
+            <div class="wallet-option-icon">
+                <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="40" height="40" rx="8" fill="#3B99FC"/>
+                    <path d="M12.5 15.5C16.6421 11.3579 23.3579 11.3579 27.5 15.5L28.1 16.1C28.3 16.3 28.3 16.6 28.1 16.8L26.5 18.4C26.4 18.5 26.2 18.5 26.1 18.4L25.6 17.9C22.5421 14.8421 17.4579 14.8421 14.4 17.9L13.9 18.4C13.8 18.5 13.6 18.5 13.5 18.4L11.9 16.8C11.7 16.6 11.7 16.3 11.9 16.1L12.5 15.5ZM29.5 18.5L30.9 19.9C31.1 20.1 31.1 20.4 30.9 20.6L20.7 30.8C20.5 31 20.2 31 20 30.8L16.6 27.4C16.4 27.2 16.4 26.9 16.6 26.7C16.8 26.5 17.1 26.5 17.3 26.7L20 29.4L29.1 20.3C29.3 20.1 29.6 20.1 29.8 20.3L31.3 21.8C31.5 22 31.5 22.3 31.3 22.5L21.3 32.5C21.1 32.7 20.8 32.7 20.6 32.5L11.6 23.5C11.4 23.3 11.4 23 11.6 22.8C11.8 22.6 12.1 22.6 12.3 22.8L20.6 31.1L30.1 21.6C30.3 21.4 30.6 21.4 30.8 21.6L32.3 23.1C32.5 23.3 32.5 23.6 32.3 23.8L22.2 33.9C22 34.1 21.7 34.1 21.5 33.9L11.4 23.8C11.2 23.6 11.2 23.3 11.4 23.1L13.2 21.3C13.4 21.1 13.7 21.1 13.9 21.3L20.1 27.5C20.3 27.7 20.3 28 20.1 28.2C19.9 28.4 19.6 28.4 19.4 28.2L12.8 21.6C12.6 21.4 12.6 21.1 12.8 20.9L14.2 19.5C14.4 19.3 14.7 19.3 14.9 19.5L20 24.6C20.2 24.8 20.2 25.1 20 25.3C19.8 25.5 19.5 25.5 19.3 25.3L14.8 20.8C14.6 20.6 14.6 20.3 14.8 20.1L16.6 18.3C16.8 18.1 17.1 18.1 17.3 18.3L27.5 28.5C27.7 28.7 27.7 29 27.5 29.2L20.3 36.4C20.1 36.6 19.8 36.6 19.6 36.4L10.5 27.3C10.3 27.1 10.3 26.8 10.5 26.6C10.7 26.4 11 26.4 11.2 26.6L19.6 35L27.5 27.1C27.7 26.9 28 26.9 28.2 27.1L30 28.9C30.2 29.1 30.2 29.4 30 29.6L20.1 39.5C19.9 39.7 19.6 39.7 19.4 39.5L9.3 29.4C9.1 29.2 9.1 28.9 9.3 28.7C9.5 28.5 9.8 28.5 10 28.7L19.5 38.2L29.8 27.9C30 27.7 30.3 27.7 30.5 27.9L32.1 29.5C32.3 29.7 32.3 30 32.1 30.2L21.9 40.4C21.7 40.6 21.4 40.6 21.2 40.4L11.1 30.3C10.9 30.1 10.9 29.8 11.1 29.6L12.5 28.2C12.7 28 13 28 13.2 28.2L20 35C20.2 35.2 20.2 35.5 20 35.7C19.8 35.9 19.5 35.9 19.3 35.7L11.9 28.3C11.7 28.1 11.7 27.8 11.9 27.6L13.6 25.9C13.8 25.7 14.1 25.7 14.3 25.9L20.2 31.8C20.4 32 20.4 32.3 20.2 32.5C20 32.7 19.7 32.7 19.5 32.5L14.3 27.3C14.1 27.1 14.1 26.8 14.3 26.6L16.1 24.8C16.3 24.6 16.6 24.6 16.8 24.8L27 35C27.2 35.2 27.2 35.5 27 35.7L19.8 42.9C19.6 43.1 19.3 43.1 19.1 42.9L9 32.8C8.8 32.6 8.8 32.3 9 32.1C9.2 31.9 9.5 31.9 9.7 32.1L19.2 41.6L29.5 31.3C29.7 31.1 30 31.1 30.2 31.3L31.8 32.9C32 33.1 32 33.4 31.8 33.6L21.6 43.8C21.4 44 21.1 44 20.9 43.8L10.8 33.7C10.6 33.5 10.6 33.2 10.8 33C11 32.8 11.3 32.8 11.5 33L20.6 42.1L30.9 31.8C31.1 31.6 31.4 31.6 31.6 31.8L33.2 33.4C33.4 33.6 33.4 33.9 33.2 34.1L23 44.3C22.8 44.5 22.5 44.5 22.3 44.3L12.1 34.1C11.9 33.9 11.9 33.6 12.1 33.4L13.5 32C13.7 31.8 14 31.8 14.2 32L21.4 39.2C21.6 39.4 21.6 39.7 21.4 39.9C21.2 40.1 20.9 40.1 20.7 39.9L13.3 32.5C13.1 32.3 13.1 32 13.3 31.8L15 30.1C15.2 29.9 15.5 29.9 15.7 30.1L25.9 40.3C26.1 40.5 26.1 40.8 25.9 41L18.7 48.2C18.5 48.4 18.2 48.4 18 48.2L7.9 38.1C7.7 37.9 7.7 37.6 7.9 37.4C8.1 37.2 8.4 37.2 8.6 37.4L18.1 46.9L28.4 36.6C28.6 36.4 28.9 36.4 29.1 36.6L30.7 38.2C30.9 38.4 30.9 38.7 30.7 38.9L20.5 49.1C20.3 49.3 20 49.3 19.8 49.1L9.6 38.9C9.4 38.7 9.4 38.4 9.6 38.2L11 36.8C11.2 36.6 11.5 36.6 11.7 36.8L18.9 44C19.1 44.2 19.1 44.5 18.9 44.7C18.7 44.9 18.4 44.9 18.2 44.7L10.8 37.3C10.6 37.1 10.6 36.8 10.8 36.6L12.5 34.9C12.7 34.7 13 34.7 13.2 34.9L23.4 45.1C23.6 45.3 23.6 45.6 23.4 45.8L16.2 53C16 53.2 15.7 53.2 15.5 53L5.4 42.9C5.2 42.7 5.2 42.4 5.4 42.2C5.6 42 5.9 42 6.1 42.2L15.6 51.7L25.9 41.4C26.1 41.2 26.4 41.2 26.6 41.4L28.2 43C28.4 43.2 28.4 43.5 28.2 43.7L18 53.9C17.8 54.1 17.5 54.1 17.3 53.9L7.1 43.7C6.9 43.5 6.9 43.2 7.1 43C7.3 42.8 7.6 42.8 7.8 43L17.3 52.5L27.6 42.2C27.8 42 28.1 42 28.3 42.2L29.9 43.8C30.1 44 30.1 44.3 29.9 44.5L19.7 54.7C19.5 54.9 19.2 54.9 19 54.7L8.8 44.5C8.6 44.3 8.6 44 8.8 43.8L10.2 42.4C10.4 42.2 10.7 42.2 10.9 42.4L18.1 49.6C18.3 49.8 18.3 50.1 18.1 50.3C17.9 50.5 17.6 50.5 17.4 50.3L10 42.9C9.8 42.7 9.8 42.4 10 42.2L11.7 40.5C11.9 40.3 12.2 40.3 12.4 40.5L22.6 50.7C22.8 50.9 22.8 51.2 22.6 51.4L15.4 58.6C15.2 58.8 14.9 58.8 14.7 58.6L4.5 48.4C4.3 48.2 4.3 47.9 4.5 47.7C4.7 47.5 5 47.5 5.2 47.7L14.7 57.2L25 46.9C25.2 46.7 25.5 46.7 25.7 46.9L27.3 48.5C27.5 48.7 27.5 49 27.3 49.2L17.1 59.4C16.9 59.6 16.6 59.6 16.4 59.4L6.2 49.2C6 49 6 48.7 6.2 48.5C6.4 48.3 6.7 48.3 6.9 48.5L16.4 58L26.7 47.7C26.9 47.5 27.2 47.5 27.4 47.7L29 49.3C29.2 49.5 29.2 49.8 29 50L18.8 60.2C18.6 60.4 18.3 60.4 18.1 60.2L7.9 50C7.7 49.8 7.7 49.5 7.9 49.3L9.3 47.9C9.5 47.7 9.8 47.7 10 47.9L17.2 55.1C17.4 55.3 17.4 55.6 17.2 55.8C17 56 16.7 56 16.5 55.8L9.1 48.4C8.9 48.2 8.9 47.9 9.1 47.7L10.8 46C11 45.8 11.3 45.8 11.5 46L21.7 56.2C21.9 56.4 21.9 56.7 21.7 56.9L14.5 64.1C14.3 64.3 14 64.3 13.8 64.1L3.6 53.9C3.4 53.7 3.4 53.4 3.6 53.2C3.8 53 4.1 53 4.3 53.2L13.8 62.7L24.1 52.4C24.3 52.2 24.6 52.2 24.8 52.4L26.4 54C26.6 54.2 26.6 54.5 26.4 54.7L16.2 64.9C16 65.1 15.7 65.1 15.5 64.9L5.3 54.7C5.1 54.5 5.1 54.2 5.3 54C5.5 53.8 5.8 53.8 6 54L15.5 63.5L25.8 53.2C26 53 26.3 53 26.5 53.2L28.1 54.8C28.3 55 28.3 55.3 28.1 55.5L17.9 65.7C17.7 65.9 17.4 65.9 17.2 65.7L7 55.5C6.8 55.3 6.8 55 7 54.8C7.2 54.6 7.5 54.6 7.7 54.8L17.2 64.3L27.5 54C27.7 53.8 28 53.8 28.2 54L29.8 55.6C30 55.8 30 56.1 29.8 56.3L19.6 66.5C19.4 66.7 19.1 66.7 18.9 66.5L8.7 56.3C8.5 56.1 8.5 55.8 8.7 55.6L10.1 54.2C10.3 54 10.6 54 10.8 54.2L18 61.4C18.2 61.6 18.2 61.9 18 62.1C17.8 62.3 17.5 62.3 17.3 62.1L9.9 54.7C9.7 54.5 9.7 54.2 9.9 54L11.6 52.3C11.8 52.1 12.1 52.1 12.3 52.3L22.5 62.5C22.7 62.7 22.7 63 22.5 63.2L15.3 70.4C15.1 70.6 14.8 70.6 14.6 70.4L4.4 60.2C4.2 60 4.2 59.7 4.4 59.5C4.6 59.3 4.9 59.3 5.1 59.5L14.6 69L24.9 58.7C25.1 58.5 25.4 58.5 25.6 58.7L27.2 60.3C27.4 60.5 27.4 60.8 27.2 61L17 71.2C16.8 71.4 16.5 71.4 16.3 71.2L6.1 61C5.9 60.8 5.9 60.5 6.1 60.3C6.3 60.1 6.6 60.1 6.8 60.3L16.3 69.8L26.6 59.5C26.8 59.3 27.1 59.3 27.3 59.5L28.9 61.1C29.1 61.3 29.1 61.6 28.9 61.8L18.7 72C18.5 72.2 18.2 72.2 18 72L7.8 61.8C7.6 61.6 7.6 61.3 7.8 61.1L9.2 59.7C9.4 59.5 9.7 59.5 9.9 59.7L17.1 66.9C17.3 67.1 17.3 67.4 17.1 67.6C16.9 67.8 16.6 67.8 16.4 67.6L9 60.2C8.8 60 8.8 59.7 9 59.5L10.7 57.8C10.9 57.6 11.2 57.6 11.4 57.8L21.6 68C21.8 68.2 21.8 68.5 21.6 68.7L14.4 75.9C14.2 76.1 13.9 76.1 13.7 75.9L3.5 65.7C3.3 65.5 3.3 65.2 3.5 65C3.7 64.8 4 64.8 4.2 65L13.7 74.5L24 64.2C24.2 64 24.5 64 24.7 64.2L26.3 65.8C26.5 66 26.5 66.3 26.3 66.5L16.1 76.7C15.9 76.9 15.6 76.9 15.4 76.7L5.2 66.5C5 66.3 5 66 5.2 65.8C5.4 65.6 5.7 65.6 5.9 65.8L15.4 75.3L25.7 65C25.9 64.8 26.2 64.8 26.4 65L28 66.6C28.2 66.8 28.2 67.1 28 67.3L17.8 77.5C17.6 77.7 17.3 77.7 17.1 77.5L6.9 67.3C6.7 67.1 6.7 66.8 6.9 66.6C7.1 66.4 7.4 66.4 7.6 66.6L17.1 76.1L27.4 65.8C27.6 65.6 27.9 65.6 28.1 65.8L29.7 67.4C29.9 67.6 29.9 67.9 29.7 68.1L19.5 78.3C19.3 78.5 19 78.5 18.8 78.3L8.6 68.1C8.4 67.9 8.4 67.6 8.6 67.4L10 66C10.2 65.8 10.5 65.8 10.7 66L17.9 73.2C18.1 73.4 18.1 73.7 17.9 73.9C17.7 74.1 17.4 74.1 17.2 73.9L9.8 66.5C9.6 66.3 9.6 66 9.8 65.8L11.5 64.1C11.7 63.9 12 63.9 12.2 64.1L22.4 74.3C22.6 74.5 22.6 74.8 22.4 75L15.2 82.2C15 82.4 14.7 82.4 14.5 82.2L4.3 72C4.1 71.8 4.1 71.5 4.3 71.3C4.5 71.1 4.8 71.1 5 71.3L14.5 80.8L24.8 70.5C25 70.3 25.3 70.3 25.5 70.5L27.1 72.1C27.3 72.3 27.3 72.6 27.1 72.8L16.9 83C16.7 83.2 16.4 83.2 16.2 83L6 72.8C5.8 72.6 5.8 72.3 6 72.1C6.2 71.9 6.5 71.9 6.7 72.1L16.2 81.6L26.5 71.3C26.7 71.1 27 71.1 27.2 71.3L28.8 72.9C29 73.1 29 73.4 28.8 73.6L18.6 83.8C18.4 84 18.1 84 17.9 83.8L7.7 73.6C7.5 73.4 7.5 73.1 7.7 72.9L9.1 71.5C9.3 71.3 9.6 71.3 9.8 71.5L17 78.7C17.2 78.9 17.2 79.2 17 79.4C16.8 79.6 16.5 79.6 16.3 79.4L8.9 72C8.7 71.8 8.7 71.5 8.9 71.3L10.6 69.6C10.8 69.4 11.1 69.4 11.3 69.6L21.5 79.8C21.7 80 21.7 80.3 21.5 80.5L14.3 87.7C14.1 87.9 13.8 87.9 13.6 87.7L3.4 77.5C3.2 77.3 3.2 77 3.4 76.8C3.6 76.6 3.9 76.6 4.1 76.8L13.6 86.3L23.9 76C24.1 75.8 24.4 75.8 24.6 76L26.2 77.6C26.4 77.8 26.4 78.1 26.2 78.3L16 88.5C15.8 88.7 15.5 88.7 15.3 88.5L5.1 78.3C4.9 78.1 4.9 77.8 5.1 77.6C5.3 77.4 5.6 77.4 5.8 77.6L15.3 87.1L25.6 76.8C25.8 76.6 26.1 76.6 26.3 76.8L27.9 78.4C28.1 78.6 28.1 78.9 27.9 79.1L17.7 89.3C17.5 89.5 17.2 89.5 17 89.3L6.8 79.1C6.6 78.9 6.6 78.6 6.8 78.4L8.2 77C8.4 76.8 8.7 76.8 8.9 77L16.1 84.2C16.3 84.4 16.3 84.7 16.1 84.9C15.9 85.1 15.6 85.1 15.4 84.9L8 77.5C7.8 77.3 7.8 77 8 76.8L9.7 75.1C9.9 74.9 10.2 74.9 10.4 75.1L20.6 85.3C20.8 85.5 20.8 85.8 20.6 86L13.4 93.2C13.2 93.4 12.9 93.4 12.7 93.2L2.5 83C2.3 82.8 2.3 82.5 2.5 82.3C2.7 82.1 3 82.1 3.2 82.3L12.7 91.8L23 81.5C23.2 81.3 23.5 81.3 23.7 81.5L25.3 83.1C25.5 83.3 25.5 83.6 25.3 83.8L15.1 94C14.9 94.2 14.6 94.2 14.4 94L4.2 83.8C4 83.6 4 83.3 4.2 83.1C4.4 82.9 4.7 82.9 4.9 83.1L14.4 92.6L24.7 82.3C24.9 82.1 25.2 82.1 25.4 82.3L27 83.9C27.2 84.1 27.2 84.4 27 84.6L16.8 94.8C16.6 95 16.3 95 16.1 94.8L5.9 84.6C5.7 84.4 5.7 84.1 5.9 83.9C6.1 83.7 6.4 83.7 6.6 83.9L16.1 93.4L26.4 83.1C26.6 82.9 26.9 82.9 27.1 83.1L28.7 84.7C28.9 84.9 28.9 85.2 28.7 85.4L18.5 95.6C18.3 95.8 18 95.8 17.8 95.6L7.6 85.4C7.4 85.2 7.4 84.9 7.6 84.7L9 83.3C9.2 83.1 9.5 83.1 9.7 83.3L16.9 90.5C17.1 90.7 17.1 91 16.9 91.2C16.7 91.4 16.4 91.4 16.2 91.2L8.8 83.8C8.6 83.6 8.6 83.3 8.8 83.1L10.5 81.4C10.7 81.2 11 81.2 11.2 81.4L21.4 91.6C21.6 91.8 21.6 92.1 21.4 92.3L14.2 99.5C14 99.7 13.7 99.7 13.5 99.5L3.3 89.3C3.1 89.1 3.1 88.8 3.3 88.6C3.5 88.4 3.8 88.4 4 88.6L13.5 98.1L23.8 87.8C24 87.6 24.3 87.6 24.5 87.8L26.1 89.4C26.3 89.6 26.3 89.9 26.1 90.1L15.9 100.3C15.7 100.5 15.4 100.5 15.2 100.3L5 90.1C4.8 89.9 4.8 89.6 5 89.4C5.2 89.2 5.5 89.2 5.7 89.4L15.2 98.9L25.5 88.6C25.7 88.4 26 88.4 26.2 88.6L27.8 90.2C28 90.4 28 90.7 27.8 90.9L17.6 101.1C17.4 101.3 17.1 101.3 16.9 101.1L6.7 90.9C6.5 90.7 6.5 90.4 6.7 90.2L8.1 88.8C8.3 88.6 8.6 88.6 8.8 88.8L16 96C16.2 96.2 16.2 96.5 16 96.7C15.8 96.9 15.5 96.9 15.3 96.7L7.9 89.3C7.7 89.1 7.7 88.8 7.9 88.6L9.6 86.9C9.8 86.7 10.1 86.7 10.3 86.9L20.5 97.1C20.7 97.3 20.7 97.6 20.5 97.8L13.3 105C13.1 105.2 12.8 105.2 12.6 105L2.4 94.8C2.2 94.6 2.2 94.3 2.4 94.1C2.6 93.9 2.9 93.9 3.1 94.1L12.6 103.6L22.9 93.3C23.1 93.1 23.4 93.1 23.6 93.3L25.2 94.9C25.4 95.1 25.4 95.4 25.2 95.6L15 105.8C14.8 106 14.5 106 14.3 105.8L4.1 95.6C3.9 95.4 3.9 95.1 4.1 94.9C4.3 94.7 4.6 94.7 4.8 94.9L14.3 104.4L24.6 94.1C24.8 93.9 25.1 93.9 25.3 94.1L26.9 95.7C27.1 95.9 27.1 96.2 26.9 96.4L16.7 106.6C16.5 106.8 16.2 106.8 16 106.6L5.8 96.4C5.6 96.2 5.6 95.9 5.8 95.7L7.2 94.3C7.4 94.1 7.7 94.1 7.9 94.3L15.1 101.5C15.3 101.7 15.3 102 15.1 102.2C14.9 102.4 14.6 102.4 14.4 102.2L7 94.8C6.8 94.6 6.8 94.3 7 94.1L8.7 92.4C8.9 92.2 9.2 92.2 9.4 92.4L19.6 102.6C19.8 102.8 19.8 103.1 19.6 103.3L12.4 110.5C12.2 110.7 11.9 110.7 11.7 110.5L1.5 100.3C1.3 100.1 1.3 99.8 1.5 99.6C1.7 99.4 2 99.4 2.2 99.6L11.7 109.1L22 98.8C22.2 98.6 22.5 98.6 22.7 98.8L24.3 100.4C24.5 100.6 24.5 100.9 24.3 101.1L14.1 111.3C13.9 111.5 13.6 111.5 13.4 111.3L3.2 101.1C3 100.9 3 100.6 3.2 100.4C3.4 100.2 3.7 100.2 3.9 100.4L13.4 109.9L23.7 99.6C23.9 99.4 24.2 99.4 24.4 99.6L26 101.2C26.2 101.4 26.2 101.7 26 101.9L15.8 112.1C15.6 112.3 15.3 112.3 15.1 112.1L4.9 101.9C4.7 101.7 4.7 101.4 4.9 101.2L6.3 99.8C6.5 99.6 6.8 99.6 7 99.8L14.2 107C14.4 107.2 14.4 107.5 14.2 107.7C14 107.9 13.7 107.9 13.5 107.7L6.1 100.3C5.9 100.1 5.9 99.8 6.1 99.6L7.8 97.9C8 97.7 8.3 97.7 8.5 97.9L18.7 108.1C18.9 108.3 18.9 108.6 18.7 108.8L11.5 116C11.3 116.2 11 116.2 10.8 116L0.6 105.8C0.4 105.6 0.4 105.3 0.6 105.1C0.8 104.9 1.1 104.9 1.3 105.1L10.8 114.6L21.1 104.3C21.3 104.1 21.6 104.1 21.8 104.3L23.4 105.9C23.6 106.1 23.6 106.4 23.4 106.6L13.2 116.8C13 117 12.7 117 12.5 116.8L2.3 106.6C2.1 106.4 2.1 106.1 2.3 105.9C2.5 105.7 2.8 105.7 3 105.9L12.5 115.4L22.8 105.1C23 104.9 23.3 104.9 23.5 105.1L25.1 106.7C25.3 106.9 25.3 107.2 25.1 107.4L14.9 117.6C14.7 117.8 14.4 117.8 14.2 117.6L4 107.4C3.8 107.2 3.8 106.9 4 106.7L5.4 105.3C5.6 105.1 5.9 105.1 6.1 105.3L13.3 112.5C13.5 112.7 13.5 113 13.3 113.2C13.1 113.4 12.8 113.4 12.6 113.2L5.2 105.8C5 105.6 5 105.3 5.2 105.1L6.9 103.4C7.1 103.2 7.4 103.2 7.6 103.4L17.8 113.6C18 113.8 18 114.1 17.8 114.3L10.6 121.5C10.4 121.7 10.1 121.7 9.9 121.5L0 111.6V111.6Z" fill="#FFFFFF"/>
+                </svg>
+            </div>
+            <div class="wallet-option-info">
+                <div class="wallet-option-name">WalletConnect</div>
+                <div class="wallet-option-status">MetaMask or similar required</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="toast-container" id="toast-container">
+    <div class="toast" id="toast">
+        <div class="toast-icon" id="toast-icon"></div>
+        <div class="toast-title" id="toast-title"></div>
+        <div class="toast-message" id="toast-message"></div>
+        <a class="toast-link" id="toast-link" target="_blank" rel="noopener noreferrer"></a>
+        <div class="toast-progress" id="toast-progress"></div>
+    </div>
+</div>
+
+<div class="stake-page">
+    <div class="stake-container">
+        <div class="stake-card">
+            <div class="stake-header">
+                <div class="stake-header-left">
+                    <a href="index.html" class="stake-back">&larr;</a>
+                    <div class="stake-title">
+                        <div class="stake-title-icon"></div>
+                        <span data-i18n="staking.modal.title">Stake & Earn</span>
+                    </div>
+                </div>
+            </div>
+            <div class="stake-stats">
+                <div class="stake-stat">
+                    <div class="stake-stat-label" data-i18n="staking.tvl.label">Total Value Locked</div>
+                    <div class="stake-stat-value" data-staking-tvl>$0</div>
+                </div>
+                <div class="stake-stat">
+                    <div class="stake-stat-label" data-i18n="staking.apy.label">APY Yield</div>
+                    <div class="stake-stat-value" data-staking-apy>0%</div>
+                </div>
+                <div class="stake-stat">
+                    <div class="stake-stat-label" data-i18n="staking.yourStake.label">Your Stake</div>
+                    <div class="stake-stat-value" data-staking-your>$0</div>
+                </div>
+                <div class="stake-stat">
+                    <div class="stake-stat-label" data-i18n="staking.pending.label">Pending Reward</div>
+                    <div class="stake-stat-value" data-staking-pending>$0</div>
+                </div>
+            </div>
+            <div class="stake-tabs">
+                <button class="stake-tab active" data-tab="deposit" data-i18n="staking.tab.deposit">Deposit</button>
+                <button class="stake-tab" data-tab="withdraw" data-i18n="staking.tab.withdraw">Withdraw</button>
+            </div>
+            <div class="stake-form">
+                <div class="stake-form-tab active" data-form="deposit">
+                    <div class="stake-input-wrapper">
+                        <input type="number" class="stake-input" placeholder="0.0" data-staking-input-deposit />
+                        <button class="stake-max-btn" data-staking-max-deposit data-i18n="staking.max">MAX</button>
+                    </div>
+                    <div class="stake-balance">
+                        <span data-i18n="staking.balance">Balance:</span>
+                        <span data-staking-balance-deposit>0</span>
+                    </div>
+                    <div class="stake-submit-wrapper">
+                        <button class="stake-submit stake-submit-deposit" data-i18n="staking.deposit.btn">Deposit</button>
+                    </div>
+                </div>
+                <div class="stake-form-tab" data-form="withdraw">
+                    <div class="stake-input-wrapper">
+                        <input type="number" class="stake-input" placeholder="0.0" data-staking-input-withdraw />
+                        <button class="stake-max-btn" data-staking-max-withdraw data-i18n="staking.max">MAX</button>
+                    </div>
+                    <div class="stake-balance">
+                        <span data-i18n="staking.withdraw.balance">Staked:</span>
+                        <span data-staking-balance-withdraw>0</span>
+                    </div>
+                    <div class="stake-submit-wrapper">
+                        <button class="stake-submit stake-submit-withdraw" data-i18n="staking.withdraw.btn">Withdraw</button>
+                    </div>
+                    <div class="withdrawal-requests" id="withdrawal-requests" style="display:none;">
+                        <div class="withdrawal-requests-header">Withdrawal History</div>
+                        <div class="withdrawal-requests-list" id="withdrawal-requests-list"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="stake-hint" data-i18n="staking.hint">Connect wallet to stake</div>
+        </div>
+    </div>
+</div>
+
+<script src="dist/bundle.js" type="text/javascript"></script>
+<script>
+(function() {
+    var activeTab = 'deposit';
+    var refreshInterval = null;
+    var StakingApp = window.StakingApp || {};
+    var popupVisible = false;
+    var walletSelectModalVisible = false;
+
+    var withdrawInterval = null;
+    var stakeHint = document.querySelector('.stake-hint');
+    var depositForm = document.querySelector('[data-form="deposit"]');
+    var withdrawForm = document.querySelector('[data-form="withdraw"]');
+    var userDisconnected = localStorage.getItem('walletDisconnected') === 'true'; // Track if user explicitly disconnected
+
+    function init() {
+        if (typeof document === 'undefined') return;
+        document.addEventListener('DOMContentLoaded', function() {
+            bindEvents();
+            applyTranslations();
+            initWeb3();
+        });
+    }
+
+    function toggleWalletPopup() {
+        var popup = document.getElementById('wallet-popup');
+        var overlay = document.getElementById('wallet-overlay');
+        if (!popup || !overlay) return;
+
+        popupVisible = !popupVisible;
+        popup.classList.toggle('show', popupVisible);
+        overlay.classList.toggle('show', popupVisible);
+    }
+
+    function hideWalletPopup() {
+        var popup = document.getElementById('wallet-popup');
+        var overlay = document.getElementById('wallet-overlay');
+        if (!popup || !overlay) return;
+        popupVisible = false;
+        popup.classList.remove('show');
+        overlay.classList.remove('show');
+    }
+
+    function updateWalletPopup(address) {
+        var popup = document.getElementById('wallet-popup');
+        var addressEl = document.getElementById('wallet-popup-address');
+        if (!popup || !addressEl) return;
+        addressEl.textContent = address || '';
+        addressEl.href = 'https://testnet.bscscan.com/address/' + address;
+    }
+
+    function showWalletSelectModal() {
+        var modal = document.getElementById('wallet-select-modal');
+        if (!modal) return;
+        walletSelectModalVisible = true;
+        modal.classList.add('show');
+        updateWalletOptions();
+    }
+
+    function hideWalletSelectModal() {
+        var modal = document.getElementById('wallet-select-modal');
+        if (!modal) return;
+        walletSelectModalVisible = false;
+        modal.classList.remove('show');
+    }
+
+    function updateWalletOptions() {
+        var wallets = StakingApp.getAvailableWallets ? StakingApp.getAvailableWallets() : [];
+        wallets.forEach(function(wallet) {
+            var option = document.getElementById('wallet-option-' + wallet.id);
+            if (!option) return;
+            var statusEl = option.querySelector('.wallet-option-status');
+            if (statusEl) {
+                if (wallet.id === 'walletconnect') {
+                    statusEl.textContent = 'Scan with any wallet';
+                } else {
+                    statusEl.textContent = wallet.installed ? 'Installed' : 'Not installed';
+                }
+            }
+            if (!wallet.installed && wallet.id !== 'walletconnect') {
+                option.classList.add('disabled');
+            } else {
+                option.classList.remove('disabled');
+            }
+        });
+    }
+
+    async function connectWithWallet(walletId) {
+        hideWalletSelectModal();
+        var walletBtn = document.getElementById('wallet-connect-btn');
+        if (!walletBtn) return;
+
+        try {
+            var result = await StakingApp.connectWallet(walletId);
+            if (result.success) {
+                walletBtn.classList.add('connected');
+                updateWalletPopup(result.address);
+                setHint('');
+                userDisconnected = false;
+                localStorage.setItem('walletDisconnected', 'false');
+                await loadStakingData();
+                startAutoRefresh();
+            } else {
+                setHint(result.error || 'Failed to connect wallet');
+            }
+        } catch (err) {
+            console.error('Wallet connect error:', err);
+            setHint('Failed to connect wallet');
+        }
+    }
+
+    async function handleDisconnect() {
+        hideWalletPopup();
+        if (StakingApp.disconnectWallet) {
+            await StakingApp.disconnectWallet();
+        }
+        var walletBtn = document.getElementById('wallet-connect-btn');
+        if (walletBtn) walletBtn.classList.remove('connected');
+        userDisconnected = true; // Mark as explicitly disconnected
+        localStorage.setItem('walletDisconnected', 'true'); // Persist across page refreshes
+        loadDemoData();
+        setHint('Wallet disconnected');
+    }
+
+    function bindEvents() {
+        var tabs = document.querySelectorAll('.stake-tab');
+        tabs.forEach(function(tab) {
+            tab.addEventListener('click', function() {
+                switchTab(this.getAttribute('data-tab'));
+            });
+        });
+
+        var depositSubmit = document.querySelector('.stake-submit-deposit');
+        if (depositSubmit) {
+            depositSubmit.addEventListener('click', handleDeposit);
+        }
+
+        var withdrawSubmit = document.querySelector('.stake-submit-withdraw');
+        if (withdrawSubmit) {
+            withdrawSubmit.addEventListener('click', handleWithdraw);
+        }
+
+        var maxDepositBtn = document.querySelector('[data-staking-max-deposit]');
+        if (maxDepositBtn) {
+            maxDepositBtn.addEventListener('click', function() {
+                var balance = document.querySelector('[data-staking-balance-deposit]');
+                if (balance) {
+                    var input = document.querySelector('[data-staking-input-deposit]');
+                    if (input) input.value = balance.textContent || '0';
+                }
+            });
+        }
+
+        var maxWithdrawBtn = document.querySelector('[data-staking-max-withdraw]');
+        if (maxWithdrawBtn) {
+            maxWithdrawBtn.addEventListener('click', function() {
+                var balance = document.querySelector('[data-staking-balance-withdraw]');
+                if (balance) {
+                    var input = document.querySelector('[data-staking-input-withdraw]');
+                    if (input) input.value = balance.textContent || '0';
+                }
+            });
+        }
+
+        var claimWithdrawalBtn = document.getElementById('claim-withdrawal-btn');
+        if (claimWithdrawalBtn) {
+            claimWithdrawalBtn.addEventListener('click', handleClaimWithdrawal);
+        }
+
+        var walletBtn = document.getElementById('wallet-connect-btn');
+        if (walletBtn) {
+            walletBtn.addEventListener('click', function() {
+                if (StakingApp.isWalletConnected && StakingApp.isWalletConnected()) {
+                    toggleWalletPopup();
+                } else {
+                    showWalletSelectModal();
+                }
+            });
+        }
+
+        // Wallet selection modal handlers
+        var walletSelectClose = document.getElementById('wallet-select-close');
+        if (walletSelectClose) {
+            walletSelectClose.addEventListener('click', hideWalletSelectModal);
+        }
+
+        var metamaskOption = document.getElementById('wallet-option-metamask');
+        if (metamaskOption) {
+            metamaskOption.addEventListener('click', function() {
+                if (!this.classList.contains('disabled')) {
+                    connectWithWallet('metamask');
+                }
+            });
+        }
+
+        var okxOption = document.getElementById('wallet-option-okxwallet');
+        if (okxOption) {
+            okxOption.addEventListener('click', function() {
+                if (!this.classList.contains('disabled')) {
+                    connectWithWallet('okxwallet');
+                }
+            });
+        }
+
+        var wcOption = document.getElementById('wallet-option-walletconnect');
+        if (wcOption) {
+            wcOption.addEventListener('click', function() {
+                connectWithWallet('walletconnect');
+            });
+        }
+
+        var overlay = document.getElementById('wallet-overlay');
+        if (overlay) {
+            overlay.addEventListener('click', hideWalletPopup);
+        }
+
+        var disconnectBtn = document.getElementById('wallet-disconnect-btn');
+        if (disconnectBtn) {
+            disconnectBtn.addEventListener('click', handleDisconnect);
+        }
+
+        var closeBtn = document.getElementById('wallet-popup-close');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', hideWalletPopup);
+        }
+    }
+
+    async function handleWalletConnect() {
+        var walletBtn = document.getElementById('wallet-connect-btn');
+        if (!walletBtn) return;
+
+        if (StakingApp.isWalletConnected && StakingApp.isWalletConnected()) {
+            setHint('Wallet already connected');
+            return;
+        }
+
+        try {
+            var result = await StakingApp.connectWallet();
+            if (result.success) {
+                walletBtn.classList.add('connected');
+                updateWalletPopup(result.address);
+                setHint('');
+                userDisconnected = false; // Reset disconnected flag on successful connect
+                localStorage.setItem('walletDisconnected', 'false'); // Clear persisted disconnected state
+                await loadStakingData();
+                startAutoRefresh();
+            } else {
+                setHint(result.error || 'Failed to connect wallet');
+            }
+        } catch (err) {
+            console.error('Wallet connect error:', err);
+            setHint('Failed to connect wallet');
+        }
+    }
+
+    function applyTranslations() {
+        if (typeof window === 'undefined' || !window.MEMEchelinI18n) return;
+        var lang = document.documentElement.getAttribute('lang') === 'zh-CN' ? 'zh' : 'en';
+        var copy = window.MEMEchelinI18n.getTranslations(lang);
+
+        var nodes = document.querySelectorAll('[data-i18n]');
+        nodes.forEach(function(node) {
+            var key = node.getAttribute('data-i18n');
+            if (copy[key] !== undefined) {
+                node.textContent = copy[key];
+            }
+        });
+    }
+
+    function switchTab(tab) {
+        activeTab = tab;
+        var tabs = document.querySelectorAll('.stake-tab');
+        tabs.forEach(function(t) {
+            t.classList.toggle('active', t.getAttribute('data-tab') === tab);
+        });
+
+        var forms = document.querySelectorAll('.stake-form-tab');
+        forms.forEach(function(f) {
+            f.classList.toggle('active', f.getAttribute('data-form') === tab);
+        });
+    }
+
+    async function initWeb3() {
+        if (typeof window === 'undefined') return;
+
+        // Always try to load global staking data (TVL, APY) even without wallet
+        await loadStakingDataPublic();
+
+        // Don't auto-connect if user explicitly disconnected
+        if (userDisconnected) {
+            return;
+        }
+
+        var win = window;
+        if (typeof win.ethereum !== 'undefined') {
+            try {
+                var result = await StakingApp.connectWallet();
+                if (result.success) {
+                    updateWalletPopup(result.address);
+                    await loadStakingData();
+                    startAutoRefresh();
+                    setHint('');
+                }
+            } catch (err) {
+                console.warn('Wallet not connected:', err);
+            }
+        }
+    }
+
+    async function loadStakingData() {
+        try {
+            if (!StakingApp.isWalletConnected || !StakingApp.isWalletConnected()) {
+                loadDemoData();
+                return;
+            }
+
+            var info = await StakingApp.getStakeInfo(0);
+
+            updateStat('data-staking-tvl', info.tvl);
+            updateStat('data-staking-apy', info.apy);
+            updateStat('data-staking-your', info.yourStake);
+            updateStat('data-staking-pending', info.pendingReward);
+
+            var depositBalance = document.querySelector('[data-staking-balance-deposit]');
+            if (depositBalance) depositBalance.textContent = info.tokenBalance;
+
+            var withdrawBalance = document.querySelector('[data-staking-balance-withdraw]');
+            if (withdrawBalance) withdrawBalance.textContent = info.yourStake;
+
+            setHint('');
+        } catch (err) {
+            console.error('Error loading staking data:', err);
+            loadDemoData(); // Clear old data on error
+            var errorMsg = 'Error loading data';
+            if (err && err.message) {
+                errorMsg = err.message.substring(0, 50);
+            }
+            setHint(errorMsg);
+        }
+    }
+
+    // Load public data (TVL, APY) without wallet connection
+    async function loadStakingDataPublic() {
+        try {
+            var info = await StakingApp.getStakeInfoPublic(0);
+            updateStat('data-staking-tvl', info.tvl);
+            updateStat('data-staking-apy', info.apy);
+            setHint('');
+        } catch (err) {
+            console.warn('Error loading public staking data:', err);
+            // Keep demo data on error
+        }
+    }
+
+    function loadDemoData() {
+        updateStat('data-staking-tvl', '$0');
+        updateStat('data-staking-apy', '0%');
+        updateStat('data-staking-your', '$0');
+        updateStat('data-staking-pending', '$0');
+
+        var depositBalance = document.querySelector('[data-staking-balance-deposit]');
+        if (depositBalance) depositBalance.textContent = '0';
+
+        var withdrawBalance = document.querySelector('[data-staking-balance-withdraw]');
+        if (withdrawBalance) withdrawBalance.textContent = '0';
+
+        setHint('Demo mode - contract not configured');
+    }
+
+    function startAutoRefresh() {
+        if (refreshInterval) clearInterval(refreshInterval);
+        refreshInterval = setInterval(loadStakingData, 10000);
+        startWithdrawalStatusUpdate();
+    }
+
+    function updateStat(attr, value) {
+        var el = document.querySelector('[' + attr + ']');
+        if (el) el.textContent = value;
+    }
+
+    function setHint(text) {
+        if (stakeHint) stakeHint.textContent = text;
+    }
+
+    var toastTimeout = null;
+
+    function showToast(success, title, message, txHash) {
+        var container = document.getElementById('toast-container');
+        var toast = document.getElementById('toast');
+        var icon = document.getElementById('toast-icon');
+        var titleEl = document.getElementById('toast-title');
+        var msgEl = document.getElementById('toast-message');
+        var link = document.getElementById('toast-link');
+        var progress = document.getElementById('toast-progress');
+
+        if (!container || !toast) return;
+
+        // Clear existing timeout
+        if (toastTimeout) {
+            clearTimeout(toastTimeout);
+            toastTimeout = null;
+        }
+
+        // Reset animation
+        progress.style.animation = 'none';
+        progress.offsetHeight; // Trigger reflow
+        progress.style.animation = '';
+
+        toast.className = 'toast ' + (success ? 'success' : 'error');
+        icon.textContent = success ? '\u2713' : '\u2717';
+        titleEl.textContent = title || (success ? 'Success' : 'Error');
+        msgEl.textContent = message || '';
+
+        if (txHash && success) {
+            var bscUrl = 'https://testnet.bscscan.com/tx/' + txHash;
+            link.href = bscUrl;
+            link.textContent = 'View on BscScan \u2197';
+            link.style.display = 'inline-block';
+        } else {
+            link.style.display = 'none';
+        }
+
+        container.classList.add('show');
+
+        toastTimeout = setTimeout(function() {
+            container.classList.remove('show');
+        }, 4000);
+    }
+
+    async function handleDeposit() {
+        var input = document.querySelector('[data-staking-input-deposit]');
+        var amount = input ? input.value : '';
+
+        if (!amount || parseFloat(amount) <= 0) {
+            setHint('Please enter a valid amount');
+            return;
+        }
+
+        var submitBtn = document.querySelector('.stake-submit-deposit');
+        if (submitBtn) {
+            submitBtn.textContent = 'Depositing...';
+            submitBtn.disabled = true;
+        }
+
+        try {
+            var result = await StakingApp.deposit(amount, 0);
+            showToast(result.success, result.success ? 'Deposit Success' : 'Deposit Failed', result.message, result.hash);
+            if (result.success) {
+                input.value = '';
+                await loadStakingData();
+            }
+        } catch (err) {
+            console.error('Deposit error:', err);
+            showToast(false, 'Deposit Failed', 'Transaction failed');
+        } finally {
+            if (submitBtn) {
+                submitBtn.textContent = 'Deposit';
+                submitBtn.disabled = false;
+            }
+        }
+    }
+
+    async function handleWithdraw() {
+        var input = document.querySelector('[data-staking-input-withdraw]');
+        var amount = input ? input.value : '';
+
+        if (!amount || parseFloat(amount) <= 0) {
+            setHint('Please enter a valid amount');
+            return;
+        }
+
+        var submitBtn = document.querySelector('.stake-submit-withdraw');
+        if (submitBtn) {
+            submitBtn.textContent = 'Withdrawing...';
+            submitBtn.disabled = true;
+        }
+
+        try {
+            var result = await StakingApp.withdraw(amount, 0);
+            showToast(result.success, result.success ? 'Withdraw Success' : 'Withdraw Failed', result.message, result.hash);
+            if (result.success) {
+                input.value = '';
+                await loadStakingData();
+            }
+        } catch (err) {
+            console.error('Withdraw error:', err);
+            showToast(false, 'Withdraw Failed', 'Transaction failed');
+        } finally {
+            if (submitBtn) {
+                submitBtn.textContent = 'Withdraw';
+                submitBtn.disabled = false;
+            }
+        }
+    }
+
+    async function handleClaimWithdrawal() {
+        var submitBtn = document.getElementById('claim-withdrawal-btn');
+        if (submitBtn) {
+            submitBtn.textContent = 'Claiming...';
+            submitBtn.disabled = true;
+        }
+
+        try {
+            var result = await StakingApp.claimWithdrawal();
+            showToast(result.success, result.success ? 'Claim Success' : 'Claim Failed', result.message, result.hash);
+            if (result.success) {
+                await loadStakingData();
+            }
+        } catch (err) {
+            console.error('Claim withdrawal error:', err);
+            showToast(false, 'Claim Failed', 'Transaction failed');
+        } finally {
+            if (submitBtn) {
+                submitBtn.textContent = 'Claim Withdrawal';
+                submitBtn.disabled = false;
+            }
+        }
+    }
+
+    async function updateWithdrawalStatus() {
+        try {
+            var requests = await StakingApp.getWithdrawalRequests(0);
+            var containerEl = document.getElementById('withdrawal-requests');
+            var listEl = document.getElementById('withdrawal-requests-list');
+            if (!containerEl || !listEl) return;
+
+            if (requests.length > 0) {
+                containerEl.style.display = 'block';
+                listEl.innerHTML = '';
+
+                var now = Math.floor(Date.now() / 1000);
+
+                requests.forEach(function(req, index) {
+                    var remaining = Number(req.claimableAt) - now;
+                    var amountStr = (Number(req.amount) / 1e18).toFixed(4);
+                    var timeStr = new Date(Number(req.requestTime) * 1000).toLocaleString();
+
+                    var item = document.createElement('div');
+                    item.className = 'withdrawal-request-item';
+
+                    var infoDiv = document.createElement('div');
+                    infoDiv.className = 'withdrawal-request-info';
+
+                    var amountDiv = document.createElement('div');
+                    amountDiv.className = 'withdrawal-request-amount';
+                    amountDiv.textContent = amountStr + ' Tokens';
+
+                    var timeDiv = document.createElement('div');
+                    timeDiv.className = 'withdrawal-request-time';
+                    timeDiv.textContent = 'Requested: ' + timeStr;
+
+                    var timerDiv = document.createElement('div');
+                    timerDiv.className = 'withdrawal-request-timer';
+
+                    var claimBtn = document.createElement('button');
+                    claimBtn.className = 'withdrawal-claim-btn';
+                    claimBtn.textContent = 'Claim';
+                    claimBtn.dataset.index = String(index);
+
+                    if (remaining > 0) {
+                        var timeRemaining = StakingApp.formatTimeRemaining ? StakingApp.formatTimeRemaining(BigInt(remaining)) : formatRemainingTime(remaining);
+                        timerDiv.textContent = 'Available in: ' + timeRemaining;
+                        timerDiv.classList.add('ready');
+                        claimBtn.disabled = true;
+                    } else {
+                        timerDiv.textContent = 'Ready to claim!';
+                        timerDiv.classList.add('ready');
+                        claimBtn.disabled = false;
+                        claimBtn.addEventListener('click', handleClaimWithdrawalByIndex);
+                    }
+
+                    infoDiv.appendChild(amountDiv);
+                    infoDiv.appendChild(timeDiv);
+                    infoDiv.appendChild(timerDiv);
+                    item.appendChild(infoDiv);
+                    item.appendChild(claimBtn);
+                    listEl.appendChild(item);
+                });
+            } else {
+                containerEl.style.display = 'none';
+            }
+        } catch (err) {
+            console.error('Error updating withdrawal status:', err);
+        }
+    }
+
+    async function handleClaimWithdrawalByIndex(e) {
+        var btn = e.target;
+        var index = parseInt(btn.dataset.index || '0');
+        btn.textContent = 'Claiming...';
+        btn.disabled = true;
+
+        try {
+            var result = await StakingApp.claimWithdrawal();
+            showToast(result.success, result.success ? 'Claim Success' : 'Claim Failed', result.message, result.hash);
+            if (result.success) {
+                await loadStakingData();
+                await updateWithdrawalStatus();
+            }
+        } catch (err) {
+            console.error('Claim withdrawal error:', err);
+            showToast(false, 'Claim Failed', 'Transaction failed');
+            btn.textContent = 'Claim';
+            btn.disabled = false;
+        }
+    }
+
+    function formatRemainingTime(seconds) {
+        var secs = seconds;
+        if (secs <= 0) return 'Ready';
+        var days = Math.floor(secs / 86400);
+        var hours = Math.floor((secs % 86400) / 3600);
+        var minutes = Math.floor((secs % 3600) / 60);
+        if (days > 0) return days + 'd ' + hours + 'h';
+        if (hours > 0) return hours + 'h ' + minutes + 'm';
+        return minutes + 'm';
+    }
+
+    function startWithdrawalStatusUpdate() {
+        if (withdrawInterval) clearInterval(withdrawInterval);
+        updateWithdrawalStatus();
+        withdrawInterval = setInterval(updateWithdrawalStatus, 10000);
+    }
+
+    window.StakingApp = StakingApp;
+    init();
+})();
+</script>
+
+<script src="js/i18n.js" type="text/javascript"></script>
+</body>
+</html>

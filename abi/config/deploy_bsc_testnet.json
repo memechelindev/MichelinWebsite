@@ -1,0 +1,9 @@
+{
+  "network": "bsc_testnet",
+  "timestamp": "2026-05-08T04:21:14.478Z",
+  "deployer": "0x00D76De47875AAf5D7080D97265259AB7181a1A6",
+  "contracts": {
+    "StakeToken": "0x90f3bF9bD7D3f567a434A8552bDB704819AA6198",
+    "MasterChefStaking": "0x8410004e4Ab2c2C073B6636877169F1AB646E849"
+  }
+}
