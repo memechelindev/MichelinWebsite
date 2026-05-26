@@ -149,7 +149,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👥 Contact
 
-- **Twitter**: [@MEMEchelin_CTO](https://x.com/MEMEchelin_CTO)
+- **Twitter**: [@MEMECHELIN1](https://x.com/MEMECHELIN1)
 - **Website**: [four.meme](https://four.meme/)
 
 ## ⚠️ Disclaimer
